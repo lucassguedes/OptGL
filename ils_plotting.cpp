@@ -1,29 +1,50 @@
 #include "ils_plotting.h"
+#include <iostream>
+
+#define VALUE_INDICATOR_LINE_HALF_SIZE 0.005
+#define AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR 0.01 
+#define Y_AXIS_SIZE_IN_PIXELS 500
+#define X_AXIS_SIZE_IN_PIXELS 1000
 
 double ilsPlottingGetCartesianPrecision(double axisMax){
+    std::cout  << "axisMax:" << axisMax << std::endl;
     if(axisMax < 100)
-        return 5;
+        return 5; 
     else if(axisMax < 1000)
         return 10;
-    return 1000;
+    return 1000; 
 }
 
 
 double ilsPlottingDrawLine(double x0, double y0, double x1, double y1){
-    glColor3f(1.0, 0.0, 0.0);
-    glBegin(GL_LINES);
-        glVertex2f(g_originX + (500*x0)/140, g_originY + ((500/4)*y0)/(2579));
-        glVertex2f(g_originX + (500*x1)/140, g_originY + ((500/4)*y1)/(2579));
-    glEnd();
+    double x0coord = g_originX + (X_AXIS_SIZE_IN_PIXELS*x0)/(140);
+    double y0coord = g_originY + (Y_AXIS_SIZE_IN_PIXELS)*(y0/(g_upper_bound));
 
-    glFlush();
+    double x1coord = g_originX + (X_AXIS_SIZE_IN_PIXELS*x1)/(140);
+    double y1coord = g_originY + (Y_AXIS_SIZE_IN_PIXELS)*(y1/(g_upper_bound));
+
+    if(x1coord <= g_originX + X_AXIS_SIZE_IN_PIXELS && y1coord <= g_originY + Y_AXIS_SIZE_IN_PIXELS){
+
+        if(y0coord > g_originY + Y_AXIS_SIZE_IN_PIXELS)
+            y0coord = g_originY + Y_AXIS_SIZE_IN_PIXELS;
+
+
+        glColor3f(1.0, 0.0, 0.0);
+        glBegin(GL_LINES);
+            glVertex2f(x0coord, y0coord);
+            glVertex2f(x1coord, y1coord);
+        glEnd();
+
+        glFlush();
+    }
+
 }
 
 double ilsPlottingDrawPoint(double x, double y){
     glPointSize(10);
     glColor3f(1.0, 0.0, 0.0);
     glBegin(GL_POINTS);
-        glVertex2f(g_originX +x, g_originY + y);
+        glVertex2f(g_originX +x, g_originY + y); 
     glEnd();
 
     glFlush();
@@ -34,6 +55,8 @@ void ilsPlottingDrawCartesian(double screenWidth, double screenHeight, double or
     glLineWidth(1.5);
     glColor3f(0.0, 0.0, 0.0);
 
+    g_upper_bound = 50 * maxY;
+
     g_originX = originX;
     g_originY = originY;
 
@@ -42,11 +65,11 @@ void ilsPlottingDrawCartesian(double screenWidth, double screenHeight, double or
 
 
 
-    double xAxisMax = 500;
-    double yAxisMax = 500;
+    double xAxisMax = X_AXIS_SIZE_IN_PIXELS;
+    double yAxisMax = Y_AXIS_SIZE_IN_PIXELS;
 
-    const double xPrecision = ilsPlottingGetCartesianPrecision(maxX);
-    const double yPrecision = ilsPlottingGetCartesianPrecision(maxY);
+    double xPrecision = ilsPlottingGetCartesianPrecision(maxX);
+    double yPrecision = ilsPlottingGetCartesianPrecision(g_upper_bound);
 
     
     double xStep = xPrecision*(xAxisMax/maxX);
@@ -60,9 +83,9 @@ void ilsPlottingDrawCartesian(double screenWidth, double screenHeight, double or
     glEnd();
 
     glBegin(GL_TRIANGLES);
-        glVertex2f(originX + xAxisMax, originY - 0.01*screenHeight);
-        glVertex2f(originX + xAxisMax, originY + 0.01*screenHeight);
-        glVertex2f(originX + xAxisMax + 0.01*screenWidth, originY);
+        glVertex2f(originX + xAxisMax, originY - AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR*screenHeight);
+        glVertex2f(originX + xAxisMax, originY + AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR*screenHeight);
+        glVertex2f(originX + xAxisMax + AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR*screenWidth, originY);
     glEnd();
 
     //Drawing the y axis
@@ -72,16 +95,26 @@ void ilsPlottingDrawCartesian(double screenWidth, double screenHeight, double or
     glEnd();
 
     glBegin(GL_TRIANGLES);
-        glVertex2f(originX - 0.01*screenHeight, originY + yAxisMax);
-        glVertex2f(originX  + 0.01*screenHeight, originY + yAxisMax);
-        glVertex2f(originX,  originY + yAxisMax  + 0.01*screenWidth);
+        glVertex2f(originX - AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR*screenHeight, originY + yAxisMax);
+        glVertex2f(originX  + AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR*screenHeight, originY + yAxisMax);
+        glVertex2f(originX,  originY + yAxisMax  + AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR*screenWidth);
     glEnd();
+
+    /*Drawing the x value indicators*/
+
+
+    xStep = X_AXIS_SIZE_IN_PIXELS / 8;
+    yStep = Y_AXIS_SIZE_IN_PIXELS / 8;
+
+    xPrecision = maxX / 8;
+    yPrecision = g_upper_bound / 8;
+
 
 
     for(int i = originX, j = 0; i < originX + xAxisMax; i+=xStep, j+=xPrecision){
         glBegin(GL_LINES);
-            glVertex2f(i, originY - 0.005*screenHeight);
-            glVertex2f(i, originY + 0.005*screenHeight);
+            glVertex2f(i, originY - VALUE_INDICATOR_LINE_HALF_SIZE*screenHeight);
+            glVertex2f(i, originY + VALUE_INDICATOR_LINE_HALF_SIZE*screenHeight);
         glEnd();
 
         char coordX[200];
@@ -91,11 +124,13 @@ void ilsPlottingDrawCartesian(double screenWidth, double screenHeight, double or
         optGLDrawText(coordX,i, originY - 0.02*screenHeight);
     }
 
+    yPrecision = (yStep/Y_AXIS_SIZE_IN_PIXELS)*g_upper_bound; 
 
+    /*Drawing the y value indicators*/
     for(int i = originY, j = 0; i < originY + yAxisMax; i+=yStep, j+=yPrecision){
         glBegin(GL_LINES);
-            glVertex2f(originX - 0.005*screenHeight, i);
-            glVertex2f(originX  + 0.005*screenHeight, i);
+            glVertex2f(originX - VALUE_INDICATOR_LINE_HALF_SIZE*screenHeight, i);
+            glVertex2f(originX  + VALUE_INDICATOR_LINE_HALF_SIZE*screenHeight, i);
         glEnd();
 
         char coordY[200];

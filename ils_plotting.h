@@ -8,6 +8,7 @@ double g_originX;
 double g_originY;
 double g_window_width;
 double g_window_height;
+double g_upper_bound;
 
 double ilsPlottingGetCartesianPrecision(double axisMax);
 
