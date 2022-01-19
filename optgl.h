@@ -2,11 +2,11 @@
 #define __GRAPHICS_UTILS__H
 #include <GL/glut.h>
 
-typedef struct pointCoords{
+typedef struct point{
     int node;
     double x;
     double y;
-}tPointCoords;
+}tPoint;
 
 
 
