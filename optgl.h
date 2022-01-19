@@ -2,11 +2,19 @@
 #define __GRAPHICS_UTILS__H
 #include <GL/glut.h>
 
-typedef struct point{
+class tPoint{
+    public: 
     int node;
     double x;
     double y;
-}tPoint;
+
+    tPoint(){}
+
+    tPoint(double x, double y){
+        this->x = x;
+        this->y = y;
+    }
+};
 
 
 
