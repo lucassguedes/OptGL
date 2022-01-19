@@ -1,5 +1,6 @@
 #include "cartesian.h"
-#include <iostream>
+
+
 
 Cartesian::Cartesian(double window_width, double window_height, tPoint origin){
     this->window_width = window_width;
@@ -10,6 +11,10 @@ Cartesian::Cartesian(double window_width, double window_height, tPoint origin){
     this->line_color_rgb[0] = 1.0;
     this->line_color_rgb[1] = 0.0;
     this->line_color_rgb[2] = 0.0;
+
+    /*Default axis name*/
+    this->horizontal_axis_name = "x";
+    this->vertical_axis_name = "y";
 }
 
 double Cartesian::getCartesianAxisPrecision(double axisMax){
@@ -116,14 +121,13 @@ void Cartesian::draw_cartesian(tPoint origin, double x_max, double y_max){
     
         /*Axis names*/
         char axisName[50];
-
-        sprintf(axisName, "IterILS");
+    
+        strcpy(axisName,this->horizontal_axis_name.c_str());
         
         optGLDrawTextLarge(axisName, this->origin.x + X_AXIS_SIZE_IN_PIXELS/2, this->origin.y - 0.1*this->window_height);
-
-
-        sprintf(axisName, "Z");
         
+
+        strcpy(axisName,this->vertical_axis_name.c_str());
         optGLDrawTextLarge(axisName, this->origin.x - 0.1*this->window_height, this->origin.y + Y_AXIS_SIZE_IN_PIXELS/2);
         glFlush();
     }
