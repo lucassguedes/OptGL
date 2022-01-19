@@ -5,6 +5,11 @@ Cartesian::Cartesian(double window_width, double window_height, tPoint origin){
     this->window_width = window_width;
     this->window_height = window_height;
     this->origin = origin;
+
+    /*Default line color: red*/
+    this->line_color_rgb[0] = 1.0;
+    this->line_color_rgb[1] = 0.0;
+    this->line_color_rgb[2] = 0.0;
 }
 
 double Cartesian::getCartesianAxisPrecision(double axisMax){
@@ -28,7 +33,7 @@ double Cartesian::drawLine(double x0, double y0, double x1, double y1){
             y0coord = this->origin.y + Y_AXIS_SIZE_IN_PIXELS;
 
 
-        glColor3f(1.0, 0.0, 0.0);
+        glColor3f(this->line_color_rgb[0], this->line_color_rgb[1], this->line_color_rgb[2]);
         glBegin(GL_LINES);
             glVertex2f(x0coord, y0coord);
             glVertex2f(x1coord, y1coord);
@@ -55,9 +60,6 @@ void Cartesian::draw_cartesian(tPoint origin, double x_max, double y_max){
         x_value_increment = (1.0/8)*x_max;
         y_value_increment = (1.0/8)*this->y_upperbound;
 
-        std::cout << "xStep: " << xStep << std::endl;
-        std::cout << "yStep: " << yStep << std::endl;
-    
         //Drawing the x axis
         glBegin(GL_LINES);
             glVertex2f(this->origin.x, this->origin.y);
@@ -125,3 +127,9 @@ void Cartesian::draw_cartesian(tPoint origin, double x_max, double y_max){
         optGLDrawTextLarge(axisName, this->origin.x - 0.1*this->window_height, this->origin.y + Y_AXIS_SIZE_IN_PIXELS/2);
         glFlush();
     }
+
+void Cartesian::set_line_color(double red, double green, double blue){
+    this->line_color_rgb[0] = red;
+    this->line_color_rgb[1] = green;
+    this->line_color_rgb[2] = blue;
+}
