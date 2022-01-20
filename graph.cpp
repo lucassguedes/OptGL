@@ -1,31 +1,31 @@
 #include "graph.h"
 #include "optgl.h"
 
-Graph::Graph(double window_width, double window_height, std::vector<tPoint> vertexes){
+Graph::Graph(double window_width, double window_height, std::vector<tPoint> vertices){
     this->window_width = window_width;
     this->window_height = window_height;
 
-    this->vertexes = vertexes;
+    this->vertices = vertices;
 
     this->set_greatest_x();
     this->set_greatest_y();
 }
 
 void Graph::set_greatest_x(){
-    this->greatest_x_value = this->vertexes[0].x;
-    for(size_t i = 1; i < this->vertexes.size(); i++)
+    this->greatest_x_value = this->vertices[0].x;
+    for(size_t i = 1; i < this->vertices.size(); i++)
     {
-        if(this->vertexes[i].x >= this->greatest_x_value)
-            this->greatest_x_value = this->vertexes[i].x;
+        if(this->vertices[i].x >= this->greatest_x_value)
+            this->greatest_x_value = this->vertices[i].x;
     }
 }
 
 void Graph::set_greatest_y(){
-    this->greatest_y_value = this->vertexes[0].y;
-    for(size_t i = 1; i < this->vertexes.size(); i++)
+    this->greatest_y_value = this->vertices[0].y;
+    for(size_t i = 1; i < this->vertices.size(); i++)
     {
-        if(this->vertexes[i].y >= this->greatest_y_value)
-            this->greatest_y_value = this->vertexes[i].y;
+        if(this->vertices[i].y >= this->greatest_y_value)
+            this->greatest_y_value = this->vertices[i].y;
     }
 }
 
@@ -38,8 +38,8 @@ void Graph::draw(std::vector<int>s){
     glLineWidth(1.5);
     for(int i = 0; i < s.size()-1; i++){
 
-        coord1 = this->vertexes[s[i]-1];
-        coord2 = this->vertexes[s[i+1]-1];
+        coord1 = this->vertices[s[i]-1];
+        coord2 = this->vertices[s[i+1]-1];
 
         double x0,y0,x1,y1;    
         double factorX = (this->window_width - 2*WINDOW_DEFAULT_BORDER_SIZE)/this->greatest_x_value;

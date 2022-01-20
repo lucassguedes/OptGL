@@ -81,7 +81,7 @@ To run the code, you must include the shared libraries and the object files dire
 src = $(wildcard src/*.cpp)
 obj = $(src:.cpp=.o)
 
-OPTGL_PATH=/home/lucas/Documents/Desenvolvimento/OptGL
+OPTGL_PATH=/<path_to>
 
 CXXFLAGS = -std=c++11 -I include/ -I$(OPTGL_PATH) -O3 -lglut -lGLU -lGL -loptcartesian -loptgl -L$(OPTGL_PATH)/lib
 
@@ -111,7 +111,7 @@ The following code example builds a graph with 48 vertices, each one with specif
 using namespace std;
 
 int main(int argc, char ** argv){
-    std::vector<tPoint>vertexes =  {{6734, 1453},
+    std::vector<tPoint>vertices =  {{6734, 1453},
                                     {2233, 10},
                                     {5530, 1424}, 
                                     {401, 841},
@@ -165,7 +165,7 @@ int main(int argc, char ** argv){
     
     optGLInit(argc, argv, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    Graph * my_graph = new Graph(WINDOW_WIDTH, WINDOW_HEIGHT, vertexes);
+    Graph * my_graph = new Graph(WINDOW_WIDTH, WINDOW_HEIGHT, vertices);
 
     std::vector<int>sequence = {1, 9, 40, 15, 12, 11, 13, 25, 14, 23, 3, 22, 16, 41, 34, 29, 2, 26, 4, 35, 
                                 45, 10, 24, 42, 5, 48, 39, 32, 21, 47, 20, 33, 46, 36, 30, 43, 17, 27, 19, 

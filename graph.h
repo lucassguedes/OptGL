@@ -12,7 +12,7 @@
 class Graph{
     private:
 
-    std::vector<tPoint> vertexes;
+    std::vector<tPoint> vertices;
 
     double window_width;
     double window_height;
@@ -26,7 +26,7 @@ class Graph{
 
     public:
 
-    Graph(double window_width, double window_height, std::vector<tPoint> vertexes);
+    Graph(double window_width, double window_height, std::vector<tPoint> vertices);
 
     void draw(std::vector<int>s);
 
