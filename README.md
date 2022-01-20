@@ -1,5 +1,9 @@
 # OptGL - A Graphic Library for Operations Research
 
+## Prerequisites
+
+To be able to use this library, you must install openGL.
+
 
 ## How to Install
 
