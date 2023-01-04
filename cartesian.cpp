@@ -25,7 +25,7 @@ double Cartesian::getCartesianAxisPrecision(double axisMax){
     return 1000; 
 }
 
-double Cartesian::drawLine(double x0, double y0, double x1, double y1){
+void Cartesian::drawLine(double x0, double y0, double x1, double y1){
     double x0coord = this->origin.x + (X_AXIS_SIZE_IN_PIXELS*x0)/(this->x_upperbound/UPPER_BOUND_FACTOR);
     double y0coord = this->origin.y + (Y_AXIS_SIZE_IN_PIXELS)*(y0/(this->y_upperbound));
 

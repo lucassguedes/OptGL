@@ -37,7 +37,7 @@ class Cartesian{
 
     public:
 
-    double drawLine(double x0, double y0, double x1, double y1);
+    void drawLine(double x0, double y0, double x1, double y1);
 
     Cartesian(double window_width, double window_height, tPoint origin);
 

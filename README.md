@@ -8,7 +8,8 @@ To be able to use this library, you must install openGL.
 ## How to Install
 
 To install this library on linux you must download the content of this repository on you PC and after that
-put it in a specific folder of your choice.
+put it in a specific folder of your choice. After that, you must add the path to OptGL/lib to your ``LD_LIBRARY_PATH``. 
+
 If the .o and .so files are not present on ./lib and ./objs folders, you need to run the file install.sh. Otherwise, you can follow as showing in the next example.
 
 ### Usage example - cartesian.h
