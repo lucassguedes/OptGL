@@ -49,6 +49,18 @@ void Cartesian::drawLine(double x0, double y0, double x1, double y1){
 
 }
 
+void Cartesian::draw_function(std::vector<tPoint> coords)
+{
+    double previous_x = coords[0].x;
+    double previous_y = coords[0].y;
+
+    for(size_t i = 1; i < coords.size(); i++){
+        this->drawLine(previous_x, previous_y, coords[i].x, coords[i].y);
+        previous_x = coords[i].x;
+        previous_y = coords[i].y;
+    } 
+}
+
 void Cartesian::draw_cartesian(tPoint origin, double x_max, double y_max){
 
         glLineWidth(1.5);

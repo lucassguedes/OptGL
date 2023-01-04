@@ -5,6 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cstring>
+#include <vector>
 
 
 #define VALUE_INDICATOR_LINE_HALF_SIZE 0.005
@@ -38,6 +39,8 @@ class Cartesian{
     public:
 
     void drawLine(double x0, double y0, double x1, double y1);
+
+    void draw_function(std::vector<tPoint> coords);
 
     Cartesian(double window_width, double window_height, tPoint origin);
 
