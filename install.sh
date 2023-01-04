@@ -2,9 +2,9 @@
 
 # Generating objects
 
-g++ -c -o ./objs/graph.o graph.cpp -fPIC -I include/ -lglut -lGLU -lGL 
-g++ -c -o ./objs/optgl.o optgl.cpp -fPIC -I include/ -lglut -lGLU -lGL 
-g++ -c -o ./objs/cartesian.o cartesian.cpp -fPIC -I include/ -lglut -lGLU -lGL 
+g++ -c -o ./objs/graph.o ./src/graph.cpp -fPIC -I include/ -lglut -lGLU -lGL 
+g++ -c -o ./objs/optgl.o ./src/optgl.cpp -fPIC -I include/ -lglut -lGLU -lGL 
+g++ -c -o ./objs/cartesian.o ./src/cartesian.cpp -fPIC -I include/ -lglut -lGLU -lGL 
 
 # Generating shared libraries
 

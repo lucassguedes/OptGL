@@ -1,4 +1,4 @@
-#include "optgl.h"
+#include "../include/optgl.h"
 
 void optGLDrawText(char * string, float x, float y)
 {

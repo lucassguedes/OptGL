@@ -88,7 +88,7 @@ obj = $(src:.cpp=.o)
 
 OPTGL_PATH=/<path_to>
 
-CXXFLAGS = -std=c++11 -I include/ -I$(OPTGL_PATH) -O3 -lglut -lGLU -lGL -loptcartesian -loptgl -L$(OPTGL_PATH)/lib
+CXXFLAGS = -std=c++11 -I include/ -I$(OPTGL_PATH)/include -O3 -lglut -lGLU -lGL -loptcartesian -loptgl -L$(OPTGL_PATH)/lib
 
 optGLExample: $(obj)
 	$(CXX) -o $@ $^ $(CXXFLAGS)

@@ -1,5 +1,5 @@
-#include "graph.h"
-#include "optgl.h"
+#include "../include/graph.h"
+#include "../include/optgl.h"
 
 Graph::Graph(double window_width, double window_height, std::vector<tPoint> vertices){
     this->window_width = window_width;
