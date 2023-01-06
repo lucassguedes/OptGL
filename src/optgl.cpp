@@ -21,6 +21,91 @@ Window::Window(int argc, char ** argv, const int width, const int height)
     glFlush();
 }
 
+void Window::draw_figure(Cartesian cartesian)
+{
+    glLineWidth(1.5);
+    glColor3f(0.0, 0.0, 0.0);
+
+    double xStep, yStep, x_value_increment, y_value_increment;
+
+
+    int x_max = cartesian.x_upperbound / UPPER_BOUND_FACTOR;
+
+
+
+    xStep = (X_AXIS_SIZE_IN_PIXELS / 8);
+    yStep = (Y_AXIS_SIZE_IN_PIXELS / 8);
+
+    x_value_increment = (1.0 / 8) * x_max;
+    y_value_increment = (1.0 / 8) * cartesian.y_upperbound;
+
+    // Drawing the x axis
+    glBegin(GL_LINES);
+    glVertex2f(cartesian.origin.x, cartesian.origin.y);
+    glVertex2f(cartesian.origin.x + X_AXIS_SIZE_IN_PIXELS, cartesian.origin.y);
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+    glVertex2f(cartesian.origin.x + X_AXIS_SIZE_IN_PIXELS, cartesian.origin.y - AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR * this->height);
+    glVertex2f(cartesian.origin.x + X_AXIS_SIZE_IN_PIXELS, cartesian.origin.y + AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR * this->height);
+    glVertex2f(cartesian.origin.x + X_AXIS_SIZE_IN_PIXELS + AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR * this->width, cartesian.origin.y);
+    glEnd();
+
+    // Drawing the y axis
+    glBegin(GL_LINES);
+    glVertex2f(cartesian.origin.x, cartesian.origin.y);
+    glVertex2f(cartesian.origin.x, cartesian.origin.y + Y_AXIS_SIZE_IN_PIXELS);
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+    glVertex2f(cartesian.origin.x - AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR * this->height, cartesian.origin.y + Y_AXIS_SIZE_IN_PIXELS);
+    glVertex2f(cartesian.origin.x + AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR * this->height, cartesian.origin.y + Y_AXIS_SIZE_IN_PIXELS);
+    glVertex2f(cartesian.origin.x, cartesian.origin.y + Y_AXIS_SIZE_IN_PIXELS + AXIS_TRIANGLE_MAIN_SIDE_HALF_SIZE_FACTOR * this->width);
+    glEnd();
+
+    /*Drawing the x value indicators*/
+
+    for (int i = cartesian.origin.x, j = 0; i < cartesian.origin.x + X_AXIS_SIZE_IN_PIXELS; i += xStep, j += x_value_increment)
+    {
+        glBegin(GL_LINES);
+        glVertex2f(i, cartesian.origin.y - VALUE_INDICATOR_LINE_HALF_SIZE * this->height);
+        glVertex2f(i, cartesian.origin.y + VALUE_INDICATOR_LINE_HALF_SIZE * this->height);
+        glEnd();
+
+        char coordX[200];
+
+        sprintf(coordX, "%d", j);
+
+        this->draw_text(coordX, i, cartesian.origin.y - 0.02 * this->height);
+    }
+
+    /*Drawing the y value indicators*/
+    for (int i = cartesian.origin.y, j = 0; i < cartesian.origin.y + Y_AXIS_SIZE_IN_PIXELS; i += yStep, j += y_value_increment)
+    {
+        glBegin(GL_LINES);
+        glVertex2f(cartesian.origin.x - VALUE_INDICATOR_LINE_HALF_SIZE * this->height, i);
+        glVertex2f(cartesian.origin.x + VALUE_INDICATOR_LINE_HALF_SIZE * this->height, i);
+        glEnd();
+
+        char coordY[200];
+
+        sprintf(coordY, "%d", j);
+
+        this->draw_text(coordY, cartesian.origin.x - 0.045 * this->height, i);
+    }
+
+    /*Axis names*/
+    char axisName[50];
+
+    strcpy(axisName, cartesian.horizontal_axis_name.c_str());
+
+    this->draw_large_text(axisName, cartesian.origin.x + X_AXIS_SIZE_IN_PIXELS / 2, cartesian.origin.y - 0.1 * this->height);
+
+    strcpy(axisName, cartesian.vertical_axis_name.c_str());
+    this->draw_large_text(axisName, cartesian.origin.x - 0.1 * this->height, cartesian.origin.y + Y_AXIS_SIZE_IN_PIXELS / 2);
+    glFlush();
+}
+
 void Window::draw_figure(Graph graph)
 {
     tPoint coord1, coord2;
@@ -98,6 +183,44 @@ void Window::draw_large_text(char * string, int x, int y)
     while(*string)
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*string++); 
     glPopMatrix();
+}
+
+
+void Window::draw_line(Cartesian cartesian, double x0, double y0, double x1, double y1)
+{
+    double x0coord = cartesian.origin.x + (X_AXIS_SIZE_IN_PIXELS * x0) / (cartesian.x_upperbound / UPPER_BOUND_FACTOR);
+    double y0coord = cartesian.origin.y + (Y_AXIS_SIZE_IN_PIXELS) * (y0 / (cartesian.y_upperbound));
+
+    double x1coord = cartesian.origin.x + (X_AXIS_SIZE_IN_PIXELS * x1) / (cartesian.x_upperbound / UPPER_BOUND_FACTOR);
+    double y1coord = cartesian.origin.y + (Y_AXIS_SIZE_IN_PIXELS) * (y1 / (cartesian.y_upperbound));
+
+    if (x1coord <= cartesian.origin.x + X_AXIS_SIZE_IN_PIXELS && y1coord <= cartesian.origin.y + Y_AXIS_SIZE_IN_PIXELS)
+    {
+
+        if (y0coord > cartesian.origin.y + Y_AXIS_SIZE_IN_PIXELS)
+            y0coord = cartesian.origin.y + Y_AXIS_SIZE_IN_PIXELS;
+
+        glColor3f(cartesian.line_color_rgb[0], cartesian.line_color_rgb[1], cartesian.line_color_rgb[2]);
+        glBegin(GL_LINES);
+        glVertex2f(x0coord, y0coord);
+        glVertex2f(x1coord, y1coord);
+        glEnd();
+
+        glFlush();
+    }
+}
+
+void Window::draw_function(Cartesian cartesian, std::vector<tPoint> coords)
+{
+    double previous_x = coords[0].x;
+    double previous_y = coords[0].y;
+
+    for (size_t i = 1; i < coords.size(); i++)
+    {
+        this->draw_line(cartesian, previous_x, previous_y, coords[i].x, coords[i].y);
+        previous_x = coords[i].x;
+        previous_y = coords[i].y;
+    }
 }
 
 

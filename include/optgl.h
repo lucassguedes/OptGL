@@ -3,6 +3,7 @@
 #include <GL/glut.h>
 #include "graph.h"
 #include "point.h"
+#include "cartesian.h"
 
 class Window{
     private:
@@ -19,6 +20,11 @@ class Window{
 
     void draw_text(char * string, int x, int y);
     void draw_large_text(char * string, int x, int y);
+
+    void draw_figure(Cartesian cartesian);
+
+    void draw_function(Cartesian cartesian, std::vector<tPoint> coords);
+    void draw_line(Cartesian cartesian, double x0, double y0, double x1, double y1);
 };
 
 

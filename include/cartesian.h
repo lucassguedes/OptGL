@@ -1,11 +1,11 @@
 #ifndef __CARTESIAN_H__
 #define __CARTESIAN_H__
-#include "optgl.h"
 #include <stdio.h>
 #include <iostream>
 #include <algorithm>
 #include <cstring>
 #include <vector>
+#include "point.h"
 
 
 #define VALUE_INDICATOR_LINE_HALF_SIZE 0.005
@@ -18,31 +18,26 @@
 
 class Cartesian{
     private:
-        tPoint origin;
-
-        double window_width; 
-        double window_height;
-
-        double x_upperbound;
-        double y_upperbound;
-
-        double line_color_rgb[3];
-
-        std::string vertical_axis_name;
-        std::string horizontal_axis_name;
-
-
     double getCartesianAxisPrecision(double axisMax);
 
-
-
     public:
+
+    tPoint origin;
+    double x_upperbound;
+    double y_upperbound;
+    double line_color_rgb[3];
+    std::string vertical_axis_name;
+    std::string horizontal_axis_name;
+
+    void set_origin(tPoint origin);
+
+    void set_bounds(const int x, const int y);
 
     void drawLine(double x0, double y0, double x1, double y1);
 
     void draw_function(std::vector<tPoint> coords);
 
-    Cartesian(double window_width, double window_height, tPoint origin);
+    Cartesian(tPoint origin);
 
     void draw_cartesian(tPoint origin, double x_max, double y_max);
 

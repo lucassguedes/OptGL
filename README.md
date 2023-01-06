@@ -18,7 +18,7 @@ The following code example builds a positive plot of a quadratic function, using
 
 ``` C++
 
-#include <cartesian.h>
+#include <optgl.h>
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -26,34 +26,23 @@ The following code example builds a positive plot of a quadratic function, using
 #define WINDOW_WIDTH 1080
 #define WINDOW_HEIGHT 720
 
-void quadraticFunction(std::vector<double> x, std::vector<double> &y){
-    for (auto k : x){
-        y.push_back(2*pow(k,2) + 3*k + 6);
-    }
-}
-
-
 int main(int argc, char ** argv){
 
 
     std::cout << "Hello OptGL!\n";
 
     /*Creating the window*/
-    optGLInit(argc, argv, WINDOW_WIDTH, WINDOW_HEIGHT); 
+    Window window = Window(argc, argv, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     /*Generating the x and y values*/
-    std::vector<double> x, y;
+    int y;
 
-    for(int i = 0; i < 500; i++){
-        x.push_back(i);  
+    std::vector<tPoint> vertices;
+
+    for(int x = 0; x < 500; x++){
+        y = 2 * pow(x,2) + 3*x + 6;
+        vertices.push_back(tPoint(x,y));
     } 
-
-    quadraticFunction(x,y);
-
-    double previousX, previousY;
-
-    previousX = x[0];
-    previousY = y[0];
     
     /*Creating the function graph*/
     tPoint origin_point;
@@ -61,18 +50,15 @@ int main(int argc, char ** argv){
     origin_point.x = WINDOW_WIDTH/8;
     origin_point.y = WINDOW_HEIGHT/8;
 
-    Cartesian * my_cartesian = new Cartesian(WINDOW_WIDTH,WINDOW_HEIGHT, origin_point);
+    Cartesian my_cartesian = Cartesian(origin_point);
 
-    my_cartesian->draw_cartesian(origin_point, x.size(), y.size());
+    my_cartesian.set_bounds(vertices.size(), vertices.size());
 
-    for(size_t i = 1; i < x.size(); i++){
-        my_cartesian->drawLine(previousX, previousY, x[i], y[i]);
-        previousX = x[i];
-        previousY = y[i];
-    } 
+    window.draw_figure(my_cartesian);
 
+    window.draw_function(my_cartesian, vertices);
 
-    optGLMainLoop();
+    window.main_loop();
 
     return 0;
 }
@@ -108,6 +94,7 @@ The following code example builds a graph with 48 vertices, each one with specif
 ``` C++
 
 #include <graph.h>
+#include <optgl.h>
 #include <iostream>
 
 #define WINDOW_WIDTH 1080
@@ -168,18 +155,20 @@ int main(int argc, char ** argv){
 
 
     
-    optGLInit(argc, argv, WINDOW_WIDTH, WINDOW_HEIGHT);
+    Window window = Window(argc, argv, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    Graph * my_graph = new Graph(WINDOW_WIDTH, WINDOW_HEIGHT, vertices);
+    Graph my_graph = Graph(vertices);
 
     std::vector<int>sequence = {1, 9, 40, 15, 12, 11, 13, 25, 14, 23, 3, 22, 16, 41, 34, 29, 2, 26, 4, 35, 
                                 45, 10, 24, 42, 5, 48, 39, 32, 21, 47, 20, 33, 46, 36, 30, 43, 17, 27, 19, 
                                 37, 6, 28, 7, 18, 44, 31, 38, 8, 1};
 
-    my_graph->draw(sequence); 
+    my_graph.set_sequence(sequence);
+
+    window.draw_figure(my_graph);
 
 
-    optGLMainLoop();
+    window.main_loop();
 
 
 
