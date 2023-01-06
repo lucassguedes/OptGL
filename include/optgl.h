@@ -1,32 +1,27 @@
 #ifndef __GRAPHICS_UTILS__H
 #define __GRAPHICS_UTILS__H
 #include <GL/glut.h>
+#include "graph.h"
+#include "point.h"
 
-class tPoint{
-    public: 
-    int node;
-    double x;
-    double y;
+class Window{
+    private:
+        int width;
+        int height;
 
-    tPoint(){}
+    public:
 
-    tPoint(double x, double y){
-        this->x = x;
-        this->y = y;
-    }
+    Window(int argc, char ** argv, const int width, const int height);
+
+    void draw_figure(Graph graph);
+    void main_loop();
+    void clear();
+
+    void draw_text(char * string, int x, int y);
+    void draw_large_text(char * string, int x, int y);
 };
 
 
-
-void optGLDrawText(char * string, float x, float y);
-
-void optGLDrawTextLarge(char * string, float x, float y);
-
-void optGLClearScreen();
-
-void optGLInit(int argc, char ** argv, double window_width, double window_height);
-
-void optGLMainLoop();
 
 
 #endif
