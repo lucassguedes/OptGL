@@ -4,6 +4,7 @@
 #include "graph.h"
 #include "point.h"
 #include "cartesian.h"
+#include "tree.h"
 
 class Window{
     private:
