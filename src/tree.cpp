@@ -33,3 +33,19 @@ Node * Tree::get_node(Node * node, const int level, const int sibling, bool isth
         return nullptr;
     }
 }
+
+void Node::add_child(Node * node)
+{
+    node->father = this;
+    this->children.push_back(node);
+    this->n_descendants += (1 + node->n_descendants);
+}
+
+
+Node::Node(char* name, int level, std::vector<Node*> children)
+{
+    this->name = name;
+    this->level = level;
+    this->children = children;
+    this->n_descendants = this->children.size();
+}

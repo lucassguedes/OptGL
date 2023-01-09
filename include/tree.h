@@ -7,9 +7,15 @@
 
 class Node{
     public:
-    std::string name;
+    char* name;
     int level;  
     std::vector<Node *> children;
+    Node * father = nullptr;
+    int n_descendants;
+
+    Node(char* name, int level, std::vector<Node*> children);
+
+    void add_child(Node * node);
 };
 
 

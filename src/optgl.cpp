@@ -185,6 +185,16 @@ void Window::draw_large_text(char * string, int x, int y)
     glPopMatrix();
 }
 
+void Window::draw_line(tPoint origin, tPoint destination)
+{
+    glColor3f(1.0, 0.0, 0);
+    glLineWidth(3.0);
+    glBegin(GL_LINES);
+    glVertex2f(origin.x, origin.y);
+    glVertex2f(destination.x, destination.y);
+    glEnd();
+    glFlush();
+}
 
 void Window::draw_line(Cartesian cartesian, double x0, double y0, double x1, double y1)
 {
@@ -220,6 +230,75 @@ void Window::draw_function(Cartesian cartesian, std::vector<tPoint> coords)
         this->draw_line(cartesian, previous_x, previous_y, coords[i].x, coords[i].y);
         previous_x = coords[i].x;
         previous_y = coords[i].y;
+    }
+}
+
+void Window::draw_circle(tPoint center, float radius, float n_segments)
+{
+
+    tPoint current_point = center;
+    tPoint previous_point = tPoint(radius, 0);
+    tPoint new_point = tPoint(0,0);
+
+    float step_angle = (2 * 3.1415926) / n_segments;
+
+    glColor3f(0.75, 0.0, 0.0);
+    for(int i = 0; i <= n_segments; i++)
+    {
+        new_point = tPoint(radius * cos(step_angle * i), radius * sin(step_angle * i));
+        glBegin(GL_TRIANGLES);
+        glVertex3f(center.x, center.y,0.0);
+        glVertex3f(center.x + previous_point.x, center.y + previous_point.y,0.0);
+        glVertex3f(center.x + new_point.x, center.y + new_point.y,0.0);
+        glEnd();
+
+        previous_point = new_point;
+        glFlush(); 
+    }
+
+}
+
+void Window::draw_vertice(tPoint center, char * label, int radius, int n_segments)
+{
+    this->draw_circle(center, radius, n_segments);
+    glColor3f(0.0, 0.0, 0);
+    if(radius <= 50)
+    {
+        this->draw_text(label, center.x, center.y);
+    }else{
+        this->draw_large_text(label, center.x, center.y);
+    }
+    glFlush();
+}
+
+void Window::draw_tree(Node * root, tPoint coords, int radius, int n_segments)
+{
+
+    tPoint childcoord = coords;
+    std::vector<tPoint> children_coords;
+
+    int n_child = root->n_descendants;
+    n_child = n_child > 1 ? n_child - 1 : n_child;
+
+    childcoord.y -= (4 * radius);
+    childcoord.x -= (n_child * 2 * radius);
+
+    for(int i = 0; i < root->children.size(); i++)
+    {
+        this->draw_line(coords, childcoord);
+        children_coords.push_back(childcoord);
+        childcoord.x += n_child * 2 * radius;
+    }
+
+    this->draw_vertice(coords, root->name, radius, n_segments);
+
+    if(!root->children.size())
+        return;
+
+    for(int i = 0; i < root->children.size(); i++)
+    {
+        this->draw_vertice(children_coords[i], root->children[i]->name, radius, n_segments);
+        this->draw_tree(root->children[i], children_coords[i], radius);
     }
 }
 
