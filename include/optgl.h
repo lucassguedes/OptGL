@@ -16,7 +16,7 @@ class Window{
 
     Window(int argc, char ** argv, const int width, const int height);
 
-    void draw_figure(Graph graph);
+    void draw_figure(Graph graph, bool circle);
     void main_loop();
     void clear();
 

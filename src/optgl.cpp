@@ -106,14 +106,12 @@ void Window::draw_figure(Cartesian cartesian)
     glFlush();
 }
 
-void Window::draw_figure(Graph graph)
+void Window::draw_figure(Graph graph, bool circle)
 {
     tPoint coord1, coord2;
     char aux[80];
     /*Limpando o color buffer*/
     glClear(GL_COLOR_BUFFER_BIT);
-
-    std::vector<int> s = graph.get_sequence();
 
     /*Determinando largura da linha*/
     std::vector<tPoint> vertices = graph.get_vertices();
@@ -124,37 +122,53 @@ void Window::draw_figure(Graph graph)
     greatest_y_value = graph.get_greatesty();
 
     glLineWidth(1.5);
-    for(int i = 0; i < s.size()-1; i++){
 
-        coord1 = vertices[s[i]-1];
-        coord2 = vertices[s[i+1]-1];
+	//Desenhando vértices
+    for(int i = 0; i < vertices.size(); i++){
 
-        double x0,y0,x1,y1;    
+        coord1 = vertices[i];
+
+        double x,y;    
         double factorX = (this->width - 2*WINDOW_DEFAULT_BORDER_SIZE)/(double)greatest_x_value;
         double factorY = (this->height - 2*WINDOW_DEFAULT_BORDER_SIZE)/(double)greatest_y_value;
 
-        x0 = factorX * coord1.x + WINDOW_DEFAULT_BORDER_SIZE;
-        y0 = factorY * coord1.y + WINDOW_DEFAULT_BORDER_SIZE;
-        x1 = factorX * coord2.x + WINDOW_DEFAULT_BORDER_SIZE;
-        y1 = factorY * coord2.y + WINDOW_DEFAULT_BORDER_SIZE;
+        x = factorX * coord1.x + WINDOW_DEFAULT_BORDER_SIZE;
+        y = factorY * coord1.y + WINDOW_DEFAULT_BORDER_SIZE;
 
         /*Definindo a cor para vermelho*/
         glColor3f(1.0, 0.0, 0.0);
         /*Desenhando número dos vértices, nas coordenadas devidas*/
-        sprintf(aux, "%d", s[i]); /*Ponto inicial da linha*/
-       this->draw_text(aux,x0,y0);
-        sprintf(aux, "%d", s[i+1]); /*Ponto final da linha*/
-       this->draw_text(aux,x1,y1);
-        /*Definindo a cor para verde*/
-        glColor3f(0.0, 0.0, 0.0);
-        /*Desenhando linha que conecta os vértices*/
-        glBegin(GL_LINES);
-            glVertex2f(x0, y0);
-            glVertex2f(x1, y1); 
-        glEnd();                                                                                                                              
+        sprintf(aux, "%d", i+1); /*Ponto inicial da linha*/
+		if(circle){
+			glColor3f(0.0, 0.0, 0.0);
+			this->draw_circle(tPoint(x, y), 20, 30);
+			glColor3f(1.0, 0.0, 0.0);
+		}
+		this->draw_large_text(aux,x,y);
         
     }
-    glFlush();
+	for(auto &[first, second] : graph.get_edges())
+	{
+
+	
+        double x0,y0,x1,y1;    
+        double factorX = (this->width - 2*WINDOW_DEFAULT_BORDER_SIZE)/(double)greatest_x_value;
+        double factorY = (this->height - 2*WINDOW_DEFAULT_BORDER_SIZE)/(double)greatest_y_value;
+
+        x0 = factorX * vertices[first].x + WINDOW_DEFAULT_BORDER_SIZE;
+        y0 = factorY * vertices[first].y + WINDOW_DEFAULT_BORDER_SIZE;
+		
+        x1 = factorX * vertices[second].x + WINDOW_DEFAULT_BORDER_SIZE;
+        y1 = factorY * vertices[second].y + WINDOW_DEFAULT_BORDER_SIZE;
+		//Desenhando arestas	
+		glColor3f(0.0, 0.0, 0.0);
+		/*Desenhando linha que conecta os vértices*/
+		glBegin(GL_LINES);
+		glVertex2f(x0, y0);
+		glVertex2f(x1, y1); 
+		glEnd();                                                                                                                              
+		glFlush();
+	}
 }
 
 void Window::draw_text(char * string, int x, int y)
@@ -242,7 +256,7 @@ void Window::draw_circle(tPoint center, float radius, float n_segments)
 
     float step_angle = (2 * 3.1415926) / n_segments;
 
-    glColor3f(0.75, 0.0, 0.0);
+    //glColor3f(0.75, 0.0, 0.0);
     for(int i = 0; i <= n_segments; i++)
     {
         new_point = tPoint(radius * cos(step_angle * i), radius * sin(step_angle * i));

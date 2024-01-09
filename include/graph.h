@@ -12,7 +12,7 @@
 class Graph{
     private:
 
-    std::vector<int> sequence;
+	std::vector<std::pair<int, int> > edges;
     std::vector<tPoint> vertices;
 
 
@@ -26,13 +26,14 @@ class Graph{
 
     public:
     
-    std::vector<int> get_sequence();
     std::vector<tPoint> get_vertices();
+	std::vector<std::pair<int, int> > get_edges();
+
 
     int get_greatestx();
     int get_greatesty();    
-    
-    void set_sequence(std::vector<int> sequence);
+
+	void set_edges(std::vector<std::pair<int, int> > edges);
 
     Graph(std::vector<tPoint> vertices);
 };

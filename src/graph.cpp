@@ -34,14 +34,13 @@ void Graph::set_greatest_y(){
     }
 }
 
-void Graph::set_sequence(std::vector<int> sequence)
-{
-    this->sequence = sequence;
+
+std::vector<std::pair<int, int> > Graph::get_edges(){
+	return this->edges;
 }
 
-std::vector<int> Graph::get_sequence()
-{
-    return this->sequence;
+void Graph::set_edges(std::vector<std::pair<int, int> > edges){
+	this->edges = edges;
 }
 
 std::vector<tPoint> Graph::get_vertices()
