@@ -7,10 +7,10 @@ To be able to use this library, you must install openGL.
 
 ## How to Install
 
-To install this library on linux you must download the content of this repository on you PC and after that
-put it in a specific folder of your choice. After that, you must add the path to OptGL/lib to your ``LD_LIBRARY_PATH``. 
+To install this library on Linux, you must download the content of this repository to your PC and then put it in a specific folder of your choice. After that, you must add the path to OptGL/lib to your ``LD_LIBRARY_PATH``.
 
-If the .o and .so files are not present on ./lib and ./objs folders, you need to run the file install.sh. Otherwise, you can follow as showing in the next example.
+If the .o and .so files are not present in the ./lib and ./objs folders, you need to run the install.sh file. Otherwise, you can follow the steps shown in the next example.
+
 
 ### Usage example - cartesian.h
 
@@ -65,7 +65,7 @@ int main(int argc, char ** argv){
 
 ```
 
-To run the code, you must include the shared libraries and the object files directories. You can proceed as showing in the following makefile, beeing /<path_to> the path to optGL library in your computer and /src the source code directory:
+To run the code, you must include the shared libraries and the object files directories. You can proceed as shown in the following makefile, being /<path_to> the path to the OptGL library on your computer and /src the source code directory:
 
 ``` makefile
 
