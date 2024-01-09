@@ -126,7 +126,9 @@ void Window::draw_figure(Graph graph, bool circle)
 	//Desenhando vértices
     for(int i = 0; i < vertices.size(); i++){
 
-        coord1 = vertices[i];
+		if(!(vertices[i].visible))continue;
+		
+		coord1 = vertices[i];
 
         double x,y;    
         double factorX = (this->width - 2*WINDOW_DEFAULT_BORDER_SIZE)/(double)greatest_x_value;
@@ -144,7 +146,7 @@ void Window::draw_figure(Graph graph, bool circle)
 			this->draw_circle(tPoint(x, y), 20, 30);
 			glColor3f(1.0, 0.0, 0.0);
 		}
-		this->draw_large_text(aux,x,y);
+		this->draw_large_text(vertices[i].content,x,y);
         
     }
 	for(auto &[first, second] : graph.get_edges())
